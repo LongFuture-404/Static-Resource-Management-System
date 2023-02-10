@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.realproject.dao.LogDao">
+
+    <insert id="Add" parameterType="com.example.realproject.entity.Operation">
+        insert into operation value (null, #{ip} ,#{LastTime} ,#{phone} ,#{operation}, null)</insert>
+
+    <update id="Success" >
+        update operation set bool="操作成功" where bool IS NULL</update>
+
+    <update id="Fail">
+        update operation set bool="操作失败" where bool IS NULL</update>
+</mapper>

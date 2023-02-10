@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.realproject.dao.PriDao">
+    <select id="PriSelect" parameterType="java.lang.Integer" resultType="com.example.realproject.entity.permissions">
+        SELECT pri.* FROM pri
+            JOIN role_pri ON pri.p_id=role_pri.pr_id
+            JOIN role ON role_pri.R_id=role.R_id
+                     WHERE pri.p_pid=0 AND pri.p_abl=1 AND role.R_id=#{R_id}</select>
+
+    <select id="UserPriSelect" parameterType="java.util.Map" resultType="com.example.realproject.entity.permissions">
+        SELECT pri.* FROM pri
+            JOIN role_pri ON pri.p_id=role_pri.pr_id
+            JOIN role ON role_pri.R_id =role.R_id
+                     WHERE pri.p_pid=#{p_id} AND role_pri.R_id=#{R_id}</select>
+
+
+</mapper>

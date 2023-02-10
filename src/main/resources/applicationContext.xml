@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:property-placeholder location="classpath:druid.properties"></context:property-placeholder>
+    <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="driverClassName" value="${jdbc.driverClassName}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="maxActive" value="${maxActive}"></property>
+    </bean>
+<!--    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+<!--        <property name="dataSource" ref="druidDataSource"></property>-->
+<!--    </bean>-->
+<!--    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+<!--        <property name="dataSource" ref="druidDataSource"/>-->
+<!--    </bean>-->
+
+    <!--配置数据源相关整合mybatis -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="druidDataSource" />
+        <property name="mapperLocations" value="classpath:Mapper/*.xml" />
+    </bean>
+<!--    扫描器-扫描到dao接因为dao接口中的方法-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="com.example.realproject.dao"/>
+    </bean>
+
+
+<!--    <bean id="/handler1.do" class="com.example.springmvc.Handler.FirstHandler"></bean>-->
+<!--    <bean id="/handler2.do" class="com.example.springmvc.Handler.SecondHandler"></bean>-->
+    <context:component-scan base-package="com.example.realproject"></context:component-scan>
+<!--    配置视图解析器简化页面跳转    不能用于redirect重定向和forward转发-->
+<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
+<!--        <property name="suffix" value=".html"></property>-->
+<!--        <property name="prefix" value="WEB-INF/html/Userhtml/"></property>-->
+<!--    </bean>-->
+    <mvc:annotation-driven />
+    <mvc:default-servlet-handler />
+
+<!--        不能拦截html-->
+<!--    <mvc:interceptors>-->
+<!--        <mvc:interceptor>-->
+<!--            <mvc:mapping path="/*"/>-->
+<!--            <bean class="com.example.realproject.Interceptor.LoginWebFilter/>-->
+<!--        </mvc:interceptor>-->
+<!--    </mvc:interceptors>-->
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </bean>
+
+    <aop:aspectj-autoproxy />
+</beans>

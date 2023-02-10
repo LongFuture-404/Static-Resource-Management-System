@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.realproject.dao.UsersDao">
+
+    <select id="SelectSingle" parameterType="String" resultType="com.example.realproject.entity.Users">
+        select * from users where phone=#{phone}</select>
+
+    <select id="Flushed" parameterType="com.example.realproject.entity.Users" resultType="com.example.realproject.entity.Users">
+        <if test="checkUsers.LastTime != null and (UNIX_TIMESTAMP(users.LastTime) - UNIX_TIMESTAMP(checkUsers.LastTime) / 1000 >= 60 * 60 * 24">
+            update users set LastTime=#{users.LastTime} where phone=#{checkUsers.phone};
+            update users set TryCount=3 where phone=#{users.phone};
+            select * from users where phone=0;
+        </if>
+        update users set TryCount=0 ,State=0 where phone=#{users.phone};
+        select * from users where phone=#{users.phone};
+    </select>
+
+    <select id="Login" parameterType="com.example.realproject.entity.Users" resultType="com.example.realproject.entity.Users">
+        update users set LastTime=#{users.LastTime} where phone=#{users.phone};
+        <if test="checkUsers!=null">
+            <if test='users.password==checkUsers.password'>
+                update users set TryCount=3, State=1 where phone=#{checkUsers.phone};
+                select * from users where phone=#{checkUsers.phone};
+            </if>
+            <if test='users.password!=checkUsers.password'>
+                update users set TryCount=#{checkUsers.TryCount}-1, State=0 where phone=#{checkUsers.phone};
+                select * from users where phone=#{users.phone};
+            </if>
+        </if>
+        select * from users where phone=0;
+    </select>
+
+    <update id="Lock" parameterType="String">
+        update users set state=0 where phone=#{phone}</update>
+
+    <update id="UpdatePW" parameterType="com.example.realproject.entity.Users">
+        update users set password=#{password} where phone=#{phone}</update>
+
+    <select id="GetResult" resultType="java.lang.Integer">
+        select result from users where result=1</select>
+
+    <update id="SetResult" parameterType="java.util.Map">
+        update users set result=#{result} where phone=#{phone}</update>
+
+    <update id="NoResult">
+        update users set result=null</update>
+
+    <insert id="Insert" parameterType="com.example.realproject.entity.Users">
+        insert into users(uid,name,avatar,password,sex,brithday,phone,address,R_id,state) values
+      (#{uid} ,#{name} ,LOAD_FILE(#{avatar}) ,#{password} ,#{sex} ,#{brithday} ,#{phone} ,#{address} ,#{r_id} ,1)
+    </insert>
+
+    <select id="GetImage" resultType="hashmap" parameterType="String">
+        select CONCAT(avatar) from users where phone=#{phone}</select>
+
+    <delete id="DeleteU" parameterType="String">
+        delete from users where phone=#{phone}</delete>
+
+    <update id="UpdateU" parameterType="com.example.realproject.entity.Users">
+        update users set name=#{name},
+        <if test="avatar != null">
+                avatar=LOAD_FILE(#{avatar}),
+        </if>
+        sex=#{sex},brithday=#{brithday},phone=#{phone},address=#{address},
+        R_id=#{r_id},state=#{state} where uid=#{uid}</update>
+
+    <select id="findTotalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(*) from users <where>
+        <if test="map != null and map.name != 'ul' ">
+            <if test="map.name != null and map.name != '' ">
+                name like CONCAT(CONCAT('%',#{map.name}),'%')
+            </if>
+        </if>
+        </where></select>
+
+    <select id="findByPage" parameterType="java.util.Map" resultType="com.example.realproject.entity.Users">
+        select * from users <where>
+            <if test="map != null and map.name != 'ul' ">
+                <if test="map.name != null and map.name != '' ">
+                    name like CONCAT(CONCAT('%',#{map.name}),'%')
+                </if>
+            </if>
+        </where>limit #{start},#{rows}</select>
+</mapper>
+

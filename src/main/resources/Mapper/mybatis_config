@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+<!--    <properties resource="druid.properties"></properties>-->
+<!--    <environments default="dev">-->
+<!--        <environment id="dev">-->
+<!--            <transactionManager type="JDBC"></transactionManager>-->
+<!--            <dataSource type="POOLED">-->
+<!--                <property name="driver" value="${jdbc.driverClassName}"></property>-->
+<!--                <property name="url" value="${jdbc.url}"></property>-->
+<!--                <property name="username" value="${jdbc.username}"></property>-->
+<!--                <property name="password" value="${jdbc.password}"></property>-->
+<!--                <property name="maxActive" value="${maxActive}"></property>-->
+<!--            </dataSource>-->
+<!--        </environment>-->
+<!--    </environments>-->
+<!--    &lt;!&ndash;    <environments default="dev">&ndash;&gt;-->
+<!--    &lt;!&ndash;        <environment id="dev">&ndash;&gt;-->
+<!--    &lt;!&ndash;        </environment>&ndash;&gt;-->
+<!--    &lt;!&ndash;    </environments>&ndash;&gt;-->
+
+<!--    <mappers>-->
+<!--        <mapper resource="Mapper/UserMapper.xml"/>-->
+<!--        <mapper resource="Mapper/LogMapper.xml"/>-->
+<!--&lt;!&ndash;        <mapper resource="Mapper/*.xml"/>&ndash;&gt;-->
+<!--    </mappers>-->
+
+</configuration>
